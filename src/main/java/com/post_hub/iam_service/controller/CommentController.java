@@ -18,25 +18,26 @@ import java.util.Map;
 @RequestMapping("/comments")
 public class CommentController {
 
-    private CommentService commentService;
-
-    public void setCommentService(CommentService commentService) {
-        this.commentService = commentService;
+    private final CommentService defaultCommentService;
+    private final CommentService advancedCommentService;
+    @Autowired
+    public CommentController(CommentService defaultCommentService, @Qualifier("advancedCommentService") CommentService advancedCommentService) {
+        this.defaultCommentService = defaultCommentService;
+        this.advancedCommentService = advancedCommentService;
     }
 
-    @PostMapping("/create")
+
+    @PostMapping("/createDefault")
     public ResponseEntity<String> addComment(@RequestBody Map<String, Object> requestBody) {
         String content = (String) requestBody.get("content");
-        commentService.createComment(content);
-        return new ResponseEntity<>("success", HttpStatus.OK);
+        defaultCommentService.createComment(content);
+        return new ResponseEntity<>("success default", HttpStatus.OK);
     }
 
-    @PostMapping("/createSecond")
-    public ResponseEntity<String> switchedToSecondService(@RequestBody Map<String, Object> requestBody) {
-
-        this.commentService = new SecondCommenServiceImpl();
+    @PostMapping("/createAdvanced")
+    public ResponseEntity<String> createAdvancedComment(@RequestBody Map<String, Object> requestBody) {
         String content = (String) requestBody.get("content");
-        commentService.createComment(content);
-        return new ResponseEntity<>("success second", HttpStatus.OK);
+        advancedCommentService.createComment(content);
+        return new ResponseEntity<>("success advanced", HttpStatus.OK);
     }
 }
