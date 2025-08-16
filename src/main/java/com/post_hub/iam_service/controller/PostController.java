@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("${end.point.posts}")
 public class PostController {
-    private final PostRepository postRepository;
+
     private final PostService postService;
 
     @GetMapping("${end.point.id}")
